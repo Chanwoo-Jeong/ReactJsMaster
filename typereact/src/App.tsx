@@ -1,6 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { useState } from "react";
+import { darkTheme, lightTheme } from "./themeNew";
 
 const darkMode = {
   textColor: "white",
@@ -29,9 +30,8 @@ const BoxTwo = styled.div`
 `;
 
 interface BoxProps {
-  bgcolor : string
+  bgcolor: string;
 }
-
 
 const Box = styled.div<BoxProps>`
   display: flex;
@@ -129,34 +129,63 @@ const Wrapper = styled.div`
   background-color: ${(props) => props.theme.backgroundColor};
 `;
 
-interface personobj {
-  name : string,
-  age : number
+const WrapperNewTheme = styled(Wrapper)`
+  color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.bgColor};
+`;
+
+interface personObj {
+  name: string;
+  age?: number;
 }
 
-const SayHello = ({name, age} : personobj) =>{
-  return(
-    <div>sayHello {name} you are {age}</div>
-  )
-}
-
+const SayHello = ({ name, age = 3 }: personObj) => {
+  return (
+    <div>
+      sayHello {name} you are {age}
+    </div>
+  );
+};
 
 function App() {
-  const [mode, setMode] = useState("darkMode");
-
+  const [mode, setMode] = useState<string | null>("darkMode");
   const changeMode = () => {
     if (mode === "darkMode") setMode("lightMode");
     if (mode === "lightMode") setMode("darkMode");
   };
+  const [value, setValue] = useState<string>("");
+  const onchange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+    setValue(value);
+  };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(`Hello ${value}`)
+  };
   return (
     <>
-      <SayHello name={"woony"} age={25}/>
+      <form  onSubmit={onSubmit}>
+        <input value={value} onChange={onchange} placeholder="write your ID" />
+        <button>Log in</button>
+      </form>
+      <SayHello name={"woony"} />
+
+      <div>타입스크립트를 적용하지 않은 테마</div>
       <ThemeProvider theme={mode === "darkMode" ? darkMode : lightMode}>
         <Wrapper>Hello</Wrapper>
         <button onClick={changeMode}>
           {mode === "darkMode" ? "lightMode" : "darkMode"}
         </button>
       </ThemeProvider>
+
+      <div>타입스크립트를 적용한 테마</div>
+      <ThemeProvider theme={mode === "darkMode" ? darkTheme : lightTheme}>
+        <WrapperNewTheme>Hello</WrapperNewTheme>
+        <button onClick={changeMode}>
+          {mode === "darkMode" ? "lightMode" : "darkMode"}
+        </button>
+      </ThemeProvider>
+
       <AnimationBox1 />
       <AnimationBox2>
         {/* <span>😊</span> */}
