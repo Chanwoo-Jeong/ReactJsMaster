@@ -35,4 +35,15 @@ function getCoinPrice(coinId:string) {
       });
 }
 
-export { getCoins, getCoinInfo, getCoinPrice };
+function getCoinHistory(coinId:string){
+  return axios
+      .get(`https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`)
+      .then((Response) => {
+        return Response.data
+      })
+      .catch((Error) => {
+        console.log(Error);
+      });
+}
+
+export { getCoins, getCoinInfo, getCoinPrice ,getCoinHistory };
