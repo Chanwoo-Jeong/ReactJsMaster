@@ -6,10 +6,14 @@ import {
   Outlet,
   useMatch,
 } from "react-router-dom";
-// import { Switch } from "react-router-dom";
+
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getCoinInfo, getCoinPrice } from "../Api/api";
+import { useQuery } from "@tanstack/react-query";
+
+
 const Container = styled.div`
   padding: 0px 20px;
 `;
@@ -137,45 +141,52 @@ interface PriceData {
 }
 
 function Coin() {
-  const [loading, setLoading] = useState<Boolean>(true);
   const { coinId } = useParams();
 
   const location = useLocation();
   const name = location.state as RouteState;
 
-  const [coinInfo, setCoinInfo] = useState<InfoData>();
-  const [coinPrice, setCoinPrice] = useState<PriceData>();
-
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
 
-  useEffect(() => {
-    axios
-      .get(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      .then((Response) => {
-        setCoinInfo(Response.data);
-      })
-      .catch((Error) => {
-        console.log(Error);
-      });
+  const { isLoading : infoLoading , data : infoData} = useQuery<InfoData>(["CoinInfo",coinId], () => getCoinInfo(`${coinId}`))
 
-    axios
-      .get(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      .then((Response) => {
-        setCoinPrice(Response.data);
-        setLoading(false);
-      })
-      .catch((Error) => {
-        console.log(Error);
-      });
-  }, [coinId]);
+  
+  const { isLoading : priceLoading , data : priceData} = useQuery<PriceData>(["PriceInfo",coinId], () => getCoinPrice(`${coinId}`))
+
+  const loading = infoLoading || priceLoading
+
+  // const [loading, setLoading] = useState<Boolean>(true);
+  // const [coinInfo, setCoinInfo] = useState<InfoData>();
+  // const [coinPrice, setCoinPrice] = useState<PriceData>();
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+  //     .then((Response) => {
+  //       setCoinInfo(Response.data);
+  //     })
+  //     .catch((Error) => {
+  //       console.log(Error);
+  //     });
+
+  //   axios
+  //     .get(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+  //     .then((Response) => {
+  //       setCoinPrice(Response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((Error) => {
+  //       console.log(Error);
+  //     });
+  // }, [coinId]);
 
   return (
     <>
       <Container>
         <Header>
           <Title>
-            {name?.name ? name.name : loading ? "Loading..." : coinInfo?.name}
+            {name?.name ? name.name : loading ? "Loading..." : infoData?.name}
           </Title>
         </Header>
         {loading ? (
@@ -185,34 +196,34 @@ function Coin() {
             <Overview>
               <OverviewItem>
                 <span>Rank:</span>
-                <span>{coinInfo?.rank}</span>
+                <span>{infoData?.rank}</span>
               </OverviewItem>
               <OverviewItem>
                 <span>Symbol:</span>
-                <span>${coinInfo?.symbol}</span>
+                <span>${infoData?.symbol}</span>
               </OverviewItem>
               <OverviewItem>
                 <span>Open Source:</span>
-                <span>{coinInfo?.open_source ? "Yes" : "No"}</span>
+                <span>{infoData?.open_source ? "Yes" : "No"}</span>
               </OverviewItem>
             </Overview>
-            <Description>{coinInfo?.description}</Description>
+            <Description>{infoData?.description}</Description>
             <Overview>
               <OverviewItem>
                 <span>Total Suply:</span>
-                <span>{coinPrice?.total_supply}</span>
+                <span>{priceData?.total_supply}</span>
               </OverviewItem>
               <OverviewItem>
                 <span>Max Supply:</span>
-                <span>{coinPrice?.max_supply}</span>
+                <span>{priceData?.max_supply}</span>
               </OverviewItem>
             </Overview>
             <Tabs>
-              <Tab isActive={priceMatch !== null}>
-                <Link to={`/${coinId}/price`}>Price</Link>
-              </Tab>
               <Tab isActive={chartMatch !== null}>
                 <Link to={`/${coinId}/chart`}>Chart</Link>
+              </Tab>
+              <Tab isActive={priceMatch !== null}>
+                <Link to={`/${coinId}/price`}>Price</Link>
               </Tab>
             </Tabs>
             <div>

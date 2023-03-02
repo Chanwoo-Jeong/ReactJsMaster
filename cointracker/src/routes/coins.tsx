@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
+import { useQuery } from "@tanstack/react-query";
+import { getCoins } from "../Api/api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -63,31 +65,34 @@ interface CoinInterface {
 }
 
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axios
-      .get("https://api.coinpaprika.com/v1/tickers")
-      .then((Response) => {
-        setCoins(Response.data.slice(0, 99));
-        setLoading(false);
-      })
-      .catch((Error) => {
-        console.log(Error);
-      });
-  }, [coins]);
+  const { isLoading , data } = useQuery<CoinInterface[]>(["allCoins"] , getCoins)
+  console.log(isLoading , data)
+  // const [coins, setCoins] = useState<CoinInterface[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://api.coinpaprika.com/v1/tickers")
+  //     .then((Response) => {
+  //       setCoins(Response.data.slice(0, 99));
+  //       setLoading(false);
+  //     })
+  //     .catch((Error) => {
+  //       console.log(Error);
+  //     });
+  // }, [coins]);
+
   return (
     <>
       <Container>
         <Header>
           <Title>Coins</Title>
         </Header>
-        {loading ? (
+        {isLoading ? (
           <Loader>"Loading"</Loader>
         ) : (
           <CoinsList>
-            {coins.map((coin) => (
+            {data?.slice(0,100).map((coin) => (
               <Coin key={coin.id}>
                 <Link
                   to={{
