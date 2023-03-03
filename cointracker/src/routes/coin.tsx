@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getCoinInfo, getCoinPrice } from "../Api/api";
 import { useQuery } from "@tanstack/react-query";
-
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -149,12 +149,20 @@ function Coin() {
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
 
-  const { isLoading : infoLoading , data : infoData} = useQuery<InfoData>(["CoinInfo",coinId], () => getCoinInfo(`${coinId}`))
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["CoinInfo", coinId],
+    () => getCoinInfo(`${coinId}`)
+  );
 
-  
-  const { isLoading : priceLoading , data : priceData} = useQuery<PriceData>(["PriceInfo",coinId], () => getCoinPrice(`${coinId}`))
+  const { isLoading: priceLoading, data: priceData } = useQuery<PriceData>(
+    ["PriceInfo", coinId],
+    () => getCoinPrice(`${coinId}`),
+    {
+      refetchInterval: 2000,
+    }
+  );
 
-  const loading = infoLoading || priceLoading
+  const loading = infoLoading || priceLoading;
 
   // const [loading, setLoading] = useState<Boolean>(true);
   // const [coinInfo, setCoinInfo] = useState<InfoData>();
@@ -184,6 +192,11 @@ function Coin() {
   return (
     <>
       <Container>
+        <Helmet>
+          <title>
+            {name?.name ? name.name : loading ? "Loading..." : infoData?.name}
+          </title>
+        </Helmet>
         <Header>
           <Title>
             {name?.name ? name.name : loading ? "Loading..." : infoData?.name}
@@ -203,8 +216,8 @@ function Coin() {
                 <span>${infoData?.symbol}</span>
               </OverviewItem>
               <OverviewItem>
-                <span>Open Source:</span>
-                <span>{infoData?.open_source ? "Yes" : "No"}</span>
+                <span>Price:</span>
+                <span>${priceData?.quotes.USD.price.toFixed(10)}</span>
               </OverviewItem>
             </Overview>
             <Description>{infoData?.description}</Description>
