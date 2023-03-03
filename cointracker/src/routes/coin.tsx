@@ -2,14 +2,11 @@ import {
   useParams,
   Link,
   useLocation,
-  Route,
   Outlet,
   useMatch,
 } from "react-router-dom";
 
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { getCoinInfo, getCoinPrice } from "../Api/api";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet";
@@ -78,9 +75,6 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
-interface RouteParams {
-  coinId: string;
-}
 interface RouteState {
   name: string;
 }
