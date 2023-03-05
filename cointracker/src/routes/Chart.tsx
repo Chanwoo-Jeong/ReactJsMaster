@@ -13,8 +13,12 @@ interface IHistorical {
   volume: string;
   market_cap: number;
 }
+interface IRouterProps {
+  themeMode: { isDark: boolean; changeMode: () => void };
+}
 
-function Chart() {
+
+function Chart(props : IRouterProps) {
   const params = useParams();
   console.log(params);
 
@@ -48,7 +52,7 @@ function Chart() {
               background: "transparent",
             },
             theme: {
-              mode: "dark",
+              mode: props.themeMode.isDark ?  "dark" : "light",
             },
             grid: { show: false },
             stroke: {

@@ -134,6 +134,7 @@ interface PriceData {
   };
 }
 
+
 function Coin() {
   const { coinId } = useParams();
 

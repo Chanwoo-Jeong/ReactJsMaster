@@ -18,7 +18,7 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   margin-bottom: 10px;
   border-radius: 15px;
   a {
@@ -62,7 +62,11 @@ interface CoinInterface {
   type: string;
 }
 
-function Coins() {
+interface ICoinsProps {
+  themeMode: { isDark: boolean; changeMode: () => void };
+}
+
+function Coins(props : ICoinsProps) {
 
   const { isLoading , data } = useQuery<CoinInterface[]>(["allCoins"] , getCoins)
   console.log(isLoading , data)
@@ -85,6 +89,7 @@ function Coins() {
       <Container>
         <Header>
           <Title>Coins</Title>
+          <button onClick={props.themeMode.changeMode}>ChangeMode</button>
         </Header>
         {isLoading ? (
           <Loader>"Loading"</Loader>

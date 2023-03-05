@@ -1,7 +1,10 @@
 import Router from "./Router";
-import { createGlobalStyle } from "styled-components";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
+import { createGlobalStyle, useTheme } from "styled-components";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "styled-components";
+import { darkTheme , lightTheme } from "./theme";
+import React, { useState } from 'react';
+import { useTheming } from "./CustomHooks/customHooks";
 
 
 const GlobalStyle = createGlobalStyle`
@@ -68,12 +71,19 @@ a {
 `;
 
 function App() {
-  return <>
-  <GlobalStyle />
-  <Router />
-  <ReactQueryDevtools />
- 
-  </>;
+
+  const themeMode = useTheming()
+  
+  return (
+    <>
+      <ThemeProvider theme={ themeMode.isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <button onClick={themeMode.changeMode}>ChangeTheme</button>
+        <Router themeMode={themeMode} />
+        <ReactQueryDevtools />
+      </ThemeProvider>
+    </>
+  );
 }
 
 export default App;
