@@ -8,16 +8,20 @@ interface IRouterProps {
   themeMode: { isDark: boolean; changeMode: () => void };
 }
 
-function Router(props: IRouterProps) {
+function Router() {
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Coins themeMode={props.themeMode} />} />
+          <Route path="/" element={<Coins />} />
 
           <Route path="/:coinId" element={<Coin />}>
             <Route path="price" element={<Price />} />
-            <Route path="chart" element={<Chart themeMode={props.themeMode} />} />
+            <Route
+              path="chart"
+              element={<Chart  />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCoins } from "../Api/api";
+import { isDarkAtom } from "../recoil/atoms";
+import {useSetRecoilState} from "recoil"
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -66,10 +68,11 @@ interface ICoinsProps {
   themeMode: { isDark: boolean; changeMode: () => void };
 }
 
-function Coins(props : ICoinsProps) {
+function Coins() {
 
   const { isLoading , data } = useQuery<CoinInterface[]>(["allCoins"] , getCoins)
-  console.log(isLoading , data)
+  const setterFn = useSetRecoilState(isDarkAtom)
+
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
   // const [loading, setLoading] = useState(true);
   // useEffect(() => {
@@ -89,7 +92,7 @@ function Coins(props : ICoinsProps) {
       <Container>
         <Header>
           <Title>Coins</Title>
-          <button onClick={props.themeMode.changeMode}>ChangeMode</button>
+          <button onClick={()=>setterFn((prev)=>!prev)} >ChangeMode</button>
         </Header>
         {isLoading ? (
           <Loader>"Loading"</Loader>
