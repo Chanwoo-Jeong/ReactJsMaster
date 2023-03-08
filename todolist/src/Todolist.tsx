@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { DefaultValue } from "recoil";
 
 // function Todolist() {
 
@@ -30,19 +31,94 @@ import { useForm } from "react-hook-form";
 //   );
 // }
 
+interface IForm {
+  name: string;
+  Email: string;
+  password: string;
+  passwordCF: string;
+  extraError?: string;
+}
+
 function Todolist() {
-const {register , watch} = useForm();
-console.log(watch())
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<IForm>({
+    defaultValues: {
+      Email: "naver.com",
+    },
+  });
+  const onValid = (data: IForm) => {
+    if (data.password !== data.passwordCF)
+      setError(
+        "passwordCF",
+        { message: "Password are not the same" },
+        { shouldFocus: true }
+      );
+    //setError("extraError", {message : "server is offline"})
+  };
+  console.log(errors);
+  // console.log(watch());
   return (
     <>
       <div>
-        <form>
-          <input {...register("toDo")} type="text"  placeholder="write to do" />
+        <form
+          style={{ display: "flex", flexDirection: "column" }}
+          onSubmit={handleSubmit(onValid)}
+        >
+          <input
+            {...register("name", {
+              required: "name is required",
+              validate: {
+                noWoony: (value) =>
+                  value.includes("woony") ? "no woony allowed" : true,
+                noLuna: (value) =>
+                  value.includes("Lunana") ? "no Luna allowed" : true,
+              },
+              minLength: { value: 5, message: "too short name" },
+            })}
+            type="text"
+            placeholder="name"
+          />
+          <span>{errors?.name?.message as string}</span>
+          <input
+            {...register("Email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+                message: "Only naver Email use",
+              },
+            })}
+            type="text"
+            placeholder="Email"
+          />
+          <span>{errors?.Email?.message as string}</span>
+          <input
+            {...register("password", {
+              required: "password is required",
+              minLength: { value: 7, message: "too short password" },
+            })}
+            type="text"
+            placeholder="password"
+          />
+          <span>{errors?.password?.message as string}</span>
+          <input
+            {...register("passwordCF", {
+              required: "passwordCF is required",
+              minLength: { value: 7, message: "too short password" },
+            })}
+            type="text"
+            placeholder="passwordCF"
+          />
+          <span>{errors?.passwordCF?.message as string}</span>
           <button>Add</button>
+          <span>{errors?.extraError?.message as string}</span>
         </form>
-        <input {...register("name")} type="text"  placeholder="write to name" />
       </div>
-      {watch().toDo && watch().name ? "submit" :''}
+      {watch().name && watch().Email && watch().password ? "submit" : ""}
     </>
   );
 }
