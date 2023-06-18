@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
-import Todolist from "./Todolist";
+import ReactHookForm from "./Components/reactform";
+import ToDoList from "./Components/ToDoList";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -53,7 +54,8 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <Todolist />
+      {/* <ReactHookForm /> */}
+	  <ToDoList />
     </>
   );
 }

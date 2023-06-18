@@ -39,7 +39,7 @@ interface IForm {
   extraError?: string;
 }
 
-function Todolist() {
+function ReactHookForm() {
   const {
     register,
     watch,
@@ -123,4 +123,4 @@ function Todolist() {
   );
 }
 
-export default Todolist;
+export default ReactHookForm;
