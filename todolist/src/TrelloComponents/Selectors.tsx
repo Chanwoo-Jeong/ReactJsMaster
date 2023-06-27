@@ -8,12 +8,15 @@ function Selectors() {
         setMinutes(Number(e.currentTarget.value))
     }
 
-    const hours = useRecoilValue(hourSelector);
+    const [hours , setHours ] = useRecoilState(hourSelector);
 
+    const onHoursChange = (e: React.FormEvent<HTMLInputElement>) =>{
+        setHours(Number(e.currentTarget.value))
+    }
   return (
     <>
       <input value={minutes} onChange={onMinutesChange} type="number" placeholder="Minutes" />
-      <input value={hours} type="number" placeholder="Hours" />
+      <input value={hours} onChange={onHoursChange} type="number" placeholder="Hours" />
     </>
   );
 }
