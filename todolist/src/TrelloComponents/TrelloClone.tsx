@@ -43,6 +43,10 @@ const Boards = styled.div`
   width: 100%;
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+    }
 `;
 
 
