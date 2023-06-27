@@ -2,8 +2,11 @@ import "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    textColor: string;
+    // textColor: string;
+    // bgColor: string;
+    // accentColor: string;
     bgColor: string;
-    accentColor: string;
+    boardColor: string;
+    cardColor: string;
   }
 }
