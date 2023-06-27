@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import ReactHookForm from "./Components/reactform";
 import ToDoList from "./Components/ToDoList";
+import Selectors from "./TrelloComponents/Selectors";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -55,7 +56,8 @@ function App() {
     <>
       <GlobalStyle />
       {/* <ReactHookForm /> */}
-	  <ToDoList />
+	  {/* <ToDoList /> */}
+	  <Selectors />
     </>
   );
 }
