@@ -3,6 +3,7 @@ import ReactHookForm from "./Components/reactform";
 import ToDoList from "./Components/ToDoList";
 import Selectors from "./TrelloComponents/Selectors";
 import TrelloClone from "./TrelloComponents/TrelloClone";
+import Html2Canvas from "./HtmlCanvas/Html2Canvas";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -59,7 +60,8 @@ function App() {
       {/* <ReactHookForm /> */}
       {/* <ToDoList /> */}
       {/* <Selectors /> */}
-      <TrelloClone />
+      {/* <TrelloClone /> */}
+      <Html2Canvas />
     </>
   );
 }
